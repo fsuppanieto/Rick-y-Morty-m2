@@ -6,7 +6,7 @@
   padding: 0;
   display: flex;
   align-items: center;
-  justify-content: center; /* Centra el contenido horizontalmente */
+  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -18,12 +18,12 @@
   display: inline-block;
   margin: 0;
   padding: 0;
-  text-align: center; /* Centra el contenido horizontalmente */
+  text-align: center;
 }
 
 .container ul li {
   margin: 0 20px;
-  display: inline-block; /* Mantiene los elementos de la lista en línea */
+  display: inline-block;
 }
 
 .container ul li a {

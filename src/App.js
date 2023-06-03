@@ -14,8 +14,8 @@ function App() {
   const [characters, setCharacters] = useState([]);
   const [access, setAccess] = useState(false);
   const navigate = useNavigate();
-  const username = "matias@hotmail.com";
-  const password = "prueba123";
+  const username = "f@hotmail.com";
+  const password = "123";
   const location = useLocation();
 
   function login(userData) {
