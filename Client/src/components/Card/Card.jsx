@@ -1,88 +1,117 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { addFavorites, deleteFavorites } from "../../redux/actions";
+import { addFav, removeFav } from "../../redux/actions";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import styles from "./Card.module.css";
+import style from "./Card.module.css";
 
-function Card(props) {
-  const [isHovered, setIsHovered] = useState(false);
+function Card({
+  id,
+  name,
+  species,
+  status,
+  gender,
+  origin,
+  image,
+  location,
+  myFavorites,
+  addFav,
+  removeFav,
+  onClose,
+}) {
+  const [isFav, setIsFav] = useState(false);
+
+  useEffect(() => {
+    console.log(myFavorites);
+    myFavorites.forEach((fav) => {
+      console.log(fav.id, id);
+      if (fav.id === id) {
+        console.log("si");
+        setIsFav(true);
+      }
+    });
+  }, [myFavorites, id]);
 
   const handleFavorite = () => {
-    if (props.myFavorites.some((fav) => fav.id === props.id)) {
-      props.deleteFavorites(props.id);
-    } else {
-      props.addFavorites(props);
-    }
+    isFav
+      ? removeFav(id)
+      : addFav({ id, name, species, status, gender, origin, image });
+    setIsFav(!isFav);
   };
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
+  const handleCloseClick = () => {
+    onClose(id);
   };
 
   return (
-    <div
-      className={`${styles.container} ${isHovered ? styles.hovered : ""}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div className={styles.front}>
-        <img
-          className={styles.image}
-          src={props.image}
-          alt="Personaje de R&M"
-        />
-        <h2 className={styles.data}>{props.name}</h2>
+    <div className={style.container}>
+      <div className={style.front}>
+        <img className={style.image} src={image} alt="Personaje de R&M" />
+        <h2>
+          {" "}
+          {"Id: "} {id}{" "}
+        </h2>
+
+        <h2 className={style.data}>{name}</h2>
       </div>
-      <div className={styles.back}>
-        <div className={styles.buttonContainer}>
+      <div className={style.back}>
+        <div className={style.buttonContainer}>
           <button
-            onClick={handleFavorite}
-            className={styles.favoriteButton}
-            disabled={!isHovered}
+            onClick={() => handleFavorite()}
+            className={style.favoriteButton}
           >
-            {props.myFavorites.some((fav) => fav.id === props.id) ? "❤️" : "🤍"}
+            {isFav ? "❤️" : "🤍"}
           </button>
           <button
-            onClick={() => props.onClose(props.id)}
-            className={styles.closeButton}
-            disabled={!isHovered}
+            onClick={() => handleCloseClick(id)}
+            className={style.closeButton}
           >
             X
           </button>
         </div>
         <h2>
-          {"Species: "} {props.species}
+          {" "}
+          {"Species: "} {species}{" "}
         </h2>
         <h2>
-          {"Gender: "}
-          {props.gender}
+          {" "}
+          {"Gender: "} {gender}{" "}
+        </h2>
+
+        <h2>
+          {" "}
+          {"Status: "} {status}{" "}
         </h2>
         <h2>
-          {"Id: "} {props.id}
+          {" "}
+          {"Location: "} {location}{" "}
         </h2>
         <h2>
-          {"Status: "} {props.status}
+          {" "}
+          {"Origin: "}
+          {origin}{" "}
         </h2>
-        <Link to={`/detail/${props.id}`}>
-          <div className={styles.cardName}>{"¿ More info ?"}</div>
+        <Link to={`/detail/${id}`}>
+          <div className={style.cardName}>{"¿ More info ?"}</div>
         </Link>
       </div>
     </div>
   );
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addFavorites, deleteFavorites }, dispatch);
-}
-
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     myFavorites: state.myFavorites,
+  };
+}
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    addFav: (character) => {
+      dispatch(addFav(character));
+    },
+    removeFav: (id) => {
+      dispatch(removeFav(id));
+    },
   };
 }
 

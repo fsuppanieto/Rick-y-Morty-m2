@@ -7,9 +7,30 @@
   font-size: 2rem;
   font-weight: bold;
 }
+.tituloRebotante {
+  animation: bounce 5s infinite;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(100px);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  75% {
+    transform: translateX(-100px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
 
 .description {
   margin-top: 20px;
   font-size: 1.2rem;
-  color: #555;
+  color: #070404;
 }

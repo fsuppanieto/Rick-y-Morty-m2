@@ -1,34 +1,32 @@
+require("dotenv").config();
 const axios = require("axios");
+const { URL } = process.env;
+// const URL = "https://rickandmortyapi.com/api/character/";
+const getCharById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { data } = await axios(`${URL}/${id}`);
 
-const URL = "https://rickandmortyapi.com/api/character/";
-function getCharById(req, res) {
-  const id = req.params.id;
-  const apiUrl = `${URL}${id}`;
+    const { status, name, species, origin, image, gender, error } = data;
+    const character = {
+      id,
+      status,
+      name,
+      species,
+      origin,
+      image,
+      gender,
+    };
+    return name
+      ? res.json(character)
+      : res.status(404).json({ message: error });
+  } catch (reason) {
+    return res.status(500).json({ message: reason });
+  }
+};
 
-  axios
-    .get(apiUrl)
-    .then((response) => {
-      const character = response.data;
-      const { id, status, name, species, origin, image, gender } = character;
-      const characterData = {
-        id,
-        status,
-        name,
-        species,
-        origin,
-        image,
-        gender,
-      };
-      res.writeHead(200, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify(CharacterData));
-    })
-    .catch((err) => {
-      const message = "Ocurrió un error en la funcion de getCharById";
-      res.writeHead(500, { "Content-Type": "text/plain" });
-      res.end(message);
-    });
-}
-module.exports = { getCharById };
+module.exports = getCharById;
+
 //-------------------------------------------------------------------------------------
 //TODO EL CODIGO QUE HICE CON PROMISES, AHORA LO MODIFICO PARA TRABAJAR CON EXPRESS
 

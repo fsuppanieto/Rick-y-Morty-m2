@@ -8,7 +8,7 @@ export default function Nav(props) {
     <div className={styles.container}>
       <Link to={"/home"}>
         <img
-          src={require("../../assets/Rick-and-Morty-logo-600x257.png")}
+          src={require("../../assets/Rick-And-Morty-No-Background.png")}
           class="logo"
           alt="main logo"
         />

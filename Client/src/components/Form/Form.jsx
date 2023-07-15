@@ -1,3 +1,73 @@
+// import styles from "../Form/Form.module.css";
+// import React from "react";
+// import { useState, useEffect } from "react";
+// import validate from "./validate";
+
+// export default function Form({ login }) {
+//   const [userData, setUserData] = useState({ email: "", password: "" });
+//   const [errors, setErrors] = useState({ email: "", password: "" });
+
+//   const handleChange = (event) => {
+//     const name = event.target.name;
+//     const value = event.target.value;
+
+//     setUserData((prevUserData) => ({
+//       ...prevUserData,
+//       [name]: value,
+//     }));
+
+//     setErrors(validate({ ...userData, [name]: value }));
+//   };
+
+//   const handleSubmit = (event) => {
+//     event.preventDefault();
+//     if (Object.keys(errors).length === 0) {
+//       login(userData);
+//     }
+//   };
+
+//   useEffect(() => {
+//     console.log(userData);
+//   }, [userData]);
+
+//   return (
+//     <div className={styles.container}>
+//       <form onSubmit={handleSubmit}>
+//         <div>
+//           <label>Email: </label>
+//           <input
+//             className={errors.email && styles.warning}
+//             name="email"
+//             value={userData.email}
+//             type="text"
+//             onChange={handleChange}
+//             placeholder="email"
+//             autoComplete="email"
+//           />
+//           <p className={styles.danger}>{errors.email}</p>
+//         </div>
+
+//         <div>
+//           <label>Password: </label>
+//           <input
+//             className={errors.password && styles.warning}
+//             name="password"
+//             value={userData.password}
+//             type="password"
+//             onChange={handleChange}
+//             placeholder="clave"
+//             autoComplete="current-password"
+//           />
+//           <p className={styles.danger}>{errors.password}</p>
+//         </div>
+//         <button className={styles.btn} type="submit">
+//           Login
+//         </button>
+//       </form>
+//     </div>
+//   );
+// }
+
 import styles from "../Form/Form.module.css";
 import React from "react";
 import { useState } from "react";
@@ -5,11 +75,11 @@ import validate from "./validate";
 
 export default function Form(props) {
   const [userData, setUserData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [errors, setErrors] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -22,8 +92,10 @@ export default function Form(props) {
 
     setErrors(
       validate({
-        ...userData,
-        [name]: value,
+        inputs: {
+          ...userData,
+          [name]: value,
+        },
       })
     );
   }
@@ -39,8 +111,8 @@ export default function Form(props) {
           <label>Username: </label>
           <input
             className={errors.name && "warning"}
-            name="username"
-            value={userData.username}
+            name="email"
+            value={userData.email}
             type="text"
             onChange={handleInputChange}
             placeholder="email"

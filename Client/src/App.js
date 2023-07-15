@@ -6,26 +6,34 @@ import Detail from "./components/Detail/Detail";
 import Error from "./components/Error/Error";
 import Form from "./components/Form/Form";
 import Favorites from "./components/Favorites/Favorites";
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import styles from "./App.css";
+// import styles from "./App.css";
+// const URL = "http://localhost:3001/rickandmorty/character/";
 
 function App() {
   const [characters, setCharacters] = useState([]);
   const [access, setAccess] = useState(false);
+  const { pathname } = useLocation();
   const navigate = useNavigate();
-  const username = "f@hotmail.com";
+  const username = "fsuppanieto@hotmail.com";
   const password = "123";
-  const location = useLocation();
 
-  function login(userData) {
-    if (userData.password === password && userData.username === username) {
-      setAccess(true);
-      navigate("/home");
-    } else {
-      window.alert("Incorrect username/password");
+  const login = async (userData) => {
+    const URL = "http://localhost:3001/rickandmorty/login";
+    try {
+      const { email, password } = userData;
+      const { data } = await axios(
+        `${URL}?email=${email}&password=${password}`
+      );
+      const { access } = data;
+      setAccess(access);
+      access && navigate("/home");
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     !access && navigate("/");
@@ -35,38 +43,37 @@ function App() {
     setAccess(false);
     navigate("/");
   }
-  function onClose(id) {
-    setCharacters(characters.filter((data) => data.id !== id));
-  }
 
-  function onSearch(character) {
-    fetch(`https://rickandmortyapi.com/api/character/${character}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        if (data.name) {
-          if (!characters.find((el) => el.id == character))
-            setCharacters((oldChars) => [...oldChars, data]);
-          else window.alert("Personaje Repetido");
-        } else {
-          window.alert("No hay personajes con ese ID");
-        }
-      });
-  }
+  const onClose = (id) => {
+    const filtered = characters.filter((chars) => chars.id !== id);
+    setCharacters(filtered);
+  };
+
+  const onSearch = async (id) => {
+    try {
+      const { data } = await axios(`${URL}/${id}`);
+      if (data.name) {
+        setCharacters([...characters, data]);
+      } else {
+        window.alert("¡No hay personajes con este ID!");
+      }
+    } catch (error) {
+      window.alert(error.message);
+    }
+  };
 
   return (
     <div className={"App"} style={{ padding: "25px" }}>
-      {location.pathname !== "/" && <Nav logOut={logOut} onSearch={onSearch} />}
+      {pathname !== "/" && <Nav logOut={logOut} onSearch={onSearch} />}
       <Routes>
         <Route path="/" element={<Form login={login} />} />
         <Route
-          exact
           path="/home"
           element={<Cards characters={characters} onClose={onClose} />}
         />
-        <Route exact path="/about" element={<About />} />
-        <Route exact path="/favorites" element={<Favorites />} />
-        <Route exact path="/detail/:detailId" element={<Detail />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/detail/:id" element={<Detail />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </div>
@@ -74,3 +81,19 @@ function App() {
 }
 
 export default App;
+
+//   fetch(`https://rickandmortyapi.com/api/character/${id}`)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log(data);
+//       if (data.name) {
+//         if (!characters.some((character) => character.id === data.id)) {
+//           setCharacters((oldChars) => [...oldChars, data]);
+//           navigate("/home");
+//         } else window.alert("Personaje Repetido");
+//       } else {
+//         window.alert("No hay personajes con ese ID");
+//       }
+//       navigate("/home");
+//     });
+// };

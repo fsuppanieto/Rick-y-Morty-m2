@@ -1,5 +1,5 @@
 .container {
-  background-color: rgba(68, 118, 83, 0.382);
+  background-color: rgba(124, 48, 130, 0.382);
   height: 100px;
   width: 100%;
   margin: 0;
@@ -10,11 +10,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(3, 3, 3, 0.463);
 }
 
 .container ul {
-  list-style: none;
+  list-style: disc;
   display: inline-block;
   margin: 0;
   padding: 0;
@@ -42,6 +42,10 @@
   padding: 5px 10px;
   border: none;
   outline: none;
+}
+.container button:hover {
+  background-color: black;
+  color: violet;
 }
 
 .container img {
